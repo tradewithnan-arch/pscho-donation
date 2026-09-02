@@ -3,64 +3,151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bihar_Flood_Relif</title>
+<meta name="description" content="Bihar Flood Relief — support flood-affected families with a voluntary contribution.">
+<title>Bihar_Flood_Relif | Pray For Bihar</title>
 <style>
+:root{
+  --red:#ef233c;--dark:#101418;--muted:#69717c;--line:#e5e7eb;--bg:#f7f8fa;
+}
 *{box-sizing:border-box}
-body{
-  margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-  padding:20px; font-family:Arial,Helvetica,sans-serif;
-  background:linear-gradient(135deg,#f7f7f7,#ececec); color:#111;
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:#111}
+button,input{font:inherit}
+.hero{
+  min-height:700px; position:relative; display:flex; align-items:center;
+  overflow:hidden; color:#fff; background:#111;
 }
-.card{
-  width:100%; max-width:430px; background:#fff; border-radius:24px;
-  padding:32px 24px; text-align:center; box-shadow:0 15px 45px rgba(0,0,0,.12);
+.hero-photo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  background:
+    linear-gradient(90deg,rgba(8,12,16,.96) 0%,rgba(8,12,16,.82) 35%,rgba(8,12,16,.18) 75%,rgba(8,12,16,.32) 100%),
+    url("hero.jpg") center/cover no-repeat;
 }
-.heart{font-size:48px;margin-bottom:8px}
-h1{margin:0 0 8px;font-size:28px}
-p{color:#666;margin:0 0 24px;line-height:1.5}
-.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
-.quick button{
-  border:1px solid #ddd;background:#fafafa;border-radius:12px;padding:11px 4px;
-  cursor:pointer;font-weight:700
+.hero-content{position:relative;z-index:2;width:min(1180px,92%);margin:auto;padding:100px 0 180px}
+.nav{position:absolute;top:0;left:0;right:0;z-index:3;width:min(1180px,92%);margin:auto;padding:24px 0;display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:18px;font-weight:800;display:flex;align-items:center;gap:10px}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:var(--red);display:grid;place-items:center;font-size:20px}
+.nav-pill{border:1px solid rgba(255,255,255,.5);padding:10px 16px;border-radius:999px;font-weight:700}
+.kicker{font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:800;color:#ff8795;margin-bottom:16px}
+h1{font-size:clamp(48px,7vw,82px);line-height:.98;max-width:720px;margin:0 0 24px;letter-spacing:-3px}
+h1 span{color:var(--red)}
+.hero-copy{font-size:20px;line-height:1.55;max-width:560px;color:#e9edf1;margin-bottom:30px}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.stat{display:flex;align-items:center;gap:10px;font-weight:700}.stat i{font-style:normal;font-size:25px;color:#ff5365}
+.donate-wrap{position:relative;margin-top:-150px;z-index:5}
+.donate{
+  width:min(850px,92%);margin:auto;background:#fff;border-radius:28px;padding:40px;
+  box-shadow:0 25px 70px rgba(16,20,24,.18);text-align:center
 }
-.quick button:hover{background:#eee}
-.amount{
-  width:100%; padding:15px; border:1px solid #ccc; border-radius:13px;
-  font-size:20px; text-align:center; outline:none;
-}
+.heart{width:70px;height:70px;margin:-75px auto 18px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:34px;border:8px solid var(--bg)}
+.donate h2{font-size:32px;margin:0 0 8px}.donate p{color:var(--muted);margin:0 0 26px}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.quick button{border:1px solid #dfe2e7;background:#fff;border-radius:13px;padding:15px 8px;font-weight:800;cursor:pointer}
+.quick button:hover,.quick button.active{background:#111;color:#fff;border-color:#111}
+.amount{width:100%;padding:17px;border:1px solid #d8dce2;border-radius:14px;text-align:center;font-size:20px;outline:none}
 .amount:focus{border-color:#111}
-.pay{
-  width:100%; margin-top:14px; padding:15px; border:0; border-radius:13px;
-  background:#111;color:#fff;font-size:17px;font-weight:700;cursor:pointer;
+.pay{width:100%;margin-top:13px;padding:17px;border:0;border-radius:14px;background:var(--red);color:#fff;font-weight:800;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(239,35,60,.22)}
+.pay:hover{filter:brightness(.95);transform:translateY(-1px)}
+.secure{margin-top:14px;color:#8a929d;font-size:12px}
+.section{width:min(1100px,92%);margin:80px auto}
+.section-title{text-align:center;max-width:700px;margin:0 auto 35px}
+.section-title h2{font-size:36px;margin:0 0 10px}.section-title span{color:var(--red)}.section-title p{color:var(--muted);line-height:1.6}
+.impact{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.impact-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px 18px;text-align:center}
+.icon{font-size:34px;margin-bottom:12px}.impact-card h3{margin:0 0 8px}.impact-card p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}
+.quote{background:linear-gradient(120deg,#b9142c,#ef233c);color:#fff;padding:48px 20px;margin-top:80px}
+.quote-inner{width:min(1000px,92%);margin:auto;display:flex;justify-content:space-between;align-items:center;gap:30px}
+.quote p{font-size:23px;line-height:1.4;margin:0;max-width:700px;font-weight:600}.quote strong{white-space:nowrap}
+footer{background:#101418;color:#d9dde2;padding:28px 5%;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer .brand{color:#fff} footer small{color:#9299a3}
+@media(max-width:760px){
+ .hero{min-height:680px}.hero-content{padding-top:100px}
+ .hero-photo{background:linear-gradient(90deg,rgba(8,12,16,.9),rgba(8,12,16,.55)),url("hero.jpg") center/cover no-repeat}
+ h1{font-size:50px;letter-spacing:-2px}.hero-copy{font-size:17px}
+ .donate{padding:30px 18px}.donate h2{font-size:27px}.quick{grid-template-columns:repeat(2,1fr)}
+ .impact{grid-template-columns:repeat(2,1fr)}.quote-inner{flex-direction:column;align-items:flex-start}
 }
-.pay:hover{opacity:.88}
-.note{font-size:12px;color:#999;margin-top:18px}
+@media(max-width:430px){.impact{grid-template-columns:1fr}.nav-pill{display:none}}
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="heart">❤️</div>
-  <h1>Bihar_Flood_Relif</h1>
-  <p>If you'd like to support me, you can choose any amount you want.</p>
 
-  <div class="quick">
-    <button onclick="setAmount(10)">₹10</button>
-    <button onclick="setAmount(50)">₹50</button>
-    <button onclick="setAmount(100)">₹100</button>
-    <button onclick="setAmount(500)">₹500</button>
+<section class="hero">
+  <div class="hero-photo" aria-hidden="true"></div>
+
+  <nav class="nav">
+    <div class="brand"><div class="brand-mark">♥</div>Bihar_Flood_Relif</div>
+    <div class="nav-pill">♡ Pray For Bihar</div>
+  </nav>
+
+  <div class="hero-content">
+    <div class="kicker">Bihar Flood Relief</div>
+    <h1>Together We Can<br><span>Help Bihar</span></h1>
+    <p class="hero-copy">Your small contribution can bring hope, relief and essential support to people affected by the floods.</p>
+    <div class="hero-stats">
+      <div class="stat"><i>♡</i> Bring Hope</div>
+      <div class="stat"><i>✓</i> Direct UPI</div>
+      <div class="stat"><i>♧</i> Help Communities</div>
+    </div>
+  </div>
+</section>
+
+<section class="donate-wrap">
+  <div class="donate">
+    <div class="heart">♡</div>
+    <h2>Bihar_Flood_Relif</h2>
+    <p>Choose any amount you would like to contribute.</p>
+
+    <div class="quick">
+      <button onclick="setAmount(10,this)">₹10</button>
+      <button onclick="setAmount(50,this)">₹50</button>
+      <button onclick="setAmount(100,this)">₹100</button>
+      <button onclick="setAmount(500,this)">₹500</button>
+    </div>
+
+    <input id="amount" class="amount" type="number" min="1" step="1"
+           placeholder="Enter amount (₹)" inputmode="numeric">
+
+    <button class="pay" onclick="payNow()">♡ &nbsp; Pay with UPI</button>
+    <div class="secure">Secure UPI payment • You choose the amount</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">
+    <h2>Your Support Makes a <span>Real Impact</span></h2>
+    <p>Every contribution can help provide essential support and relief to people affected by flooding.</p>
   </div>
 
-  <input id="amount" class="amount" type="number" min="1" step="1"
-         placeholder="Enter amount (₹)" inputmode="numeric">
+  <div class="impact">
+    <div class="impact-card"><div class="icon">🍚</div><h3>Food & Water</h3><p>Essential food, drinking water and daily supplies.</p></div>
+    <div class="impact-card"><div class="icon">🏠</div><h3>Shelter & Relief</h3><p>Support for families needing safe temporary shelter.</p></div>
+    <div class="impact-card"><div class="icon">✚</div><h3>Medical Aid</h3><p>Emergency medical and first-aid support.</p></div>
+    <div class="impact-card"><div class="icon">♥</div><h3>Rebuild Lives</h3><p>Helping affected communities recover and rebuild.</p></div>
+  </div>
+</section>
 
-  <button class="pay" onclick="payNow()">Pay with UPI</button>
+<section class="quote">
+  <div class="quote-inner">
+    <p>“The smallest act of kindness can become someone's biggest hope.”</p>
+    <strong>♥ Pray For Bihar</strong>
+  </div>
+</section>
 
-  <div class="note">Pray For Bihar</div>
-</div>
+<footer>
+  <div class="brand"><div class="brand-mark">♥</div>Bihar_Flood_Relif</div>
+  <small>Thank you for your support and generosity. ♥</small>
+</footer>
 
 <script>
-function setAmount(value){
-  document.getElementById('amount').value=value;
+const UPI_ID = '7biharfloodhelp@naviaxis';
+const PAYEE_NAME = 'Bihar_Flood_Relif';
+const NOTE = 'Bihar_Flood_Relif';
+
+function setAmount(value, button){
+  document.getElementById('amount').value = value;
+  document.querySelectorAll('.quick button').forEach(b=>b.classList.remove('active'));
+  button.classList.add('active');
 }
 function payNow(){
   const amount = document.getElementById('amount').value;
@@ -68,17 +155,11 @@ function payNow(){
     alert('Please enter a valid amount.');
     return;
   }
-
-  const upiId = '7biharfloodhelp@naviaxis';
-  const name = 'Bihar_Flood_Relif';
-  const note = 'Bihar_Flood_Relif';
-
   const upiUrl =
-    'upi://pay?pa=' + encodeURIComponent(upiId) +
-    '&pn=' + encodeURIComponent(name) +
+    'upi://pay?pa=' + encodeURIComponent(UPI_ID) +
+    '&pn=' + encodeURIComponent(PAYEE_NAME) +
     '&am=' + encodeURIComponent(Number(amount).toFixed(2)) +
-    '&cu=INR&tn=' + encodeURIComponent(note);
-
+    '&cu=INR&tn=' + encodeURIComponent(NOTE);
   window.location.href = upiUrl;
 }
 </script>
