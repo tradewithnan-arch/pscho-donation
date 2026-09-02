@@ -1,10 +1,4 @@
-from pathlib import Path
-import zipfile
-
-out = Path("/mnt/data/Bihar_Flood_Relif_professional")
-out.mkdir(exist_ok=True)
-
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -170,25 +164,4 @@ function payNow(){
 }
 </script>
 </body>
-</html>'''
-
-(out / "index.html").write_text(html, encoding="utf-8")
-
-readme = """Bihar_Flood_Relif professional page
-
-IMPORTANT:
-1. Put a flood-relief photo named "hero.jpg" in the SAME folder as index.html.
-2. Upload both index.html and hero.jpg to your GitHub Pages repository.
-3. The existing UPI ID in the code is 7biharfloodhelp@naviaxis.
-4. The payment button opens a UPI payment intent with the amount entered by the donor.
-
-The page is responsive and designed to work on mobile and desktop.
-"""
-(out / "README.txt").write_text(readme, encoding="utf-8")
-
-zip_path = Path("/mnt/data/Bihar_Flood_Relif_professional_site.zip")
-with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
-    z.write(out / "index.html", "index.html")
-    z.write(out / "README.txt", "README.txt")
-
-print(f"Ready: {zip_path}")
+</html>
