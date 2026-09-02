@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Support pscho_045</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+  padding:20px; font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(135deg,#f7f7f7,#ececec); color:#111;
+}
+.card{
+  width:100%; max-width:430px; background:#fff; border-radius:24px;
+  padding:32px 24px; text-align:center; box-shadow:0 15px 45px rgba(0,0,0,.12);
+}
+.heart{font-size:48px;margin-bottom:8px}
+h1{margin:0 0 8px;font-size:28px}
+p{color:#666;margin:0 0 24px;line-height:1.5}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.quick button{
+  border:1px solid #ddd;background:#fafafa;border-radius:12px;padding:11px 4px;
+  cursor:pointer;font-weight:700
+}
+.quick button:hover{background:#eee}
+.amount{
+  width:100%; padding:15px; border:1px solid #ccc; border-radius:13px;
+  font-size:20px; text-align:center; outline:none;
+}
+.amount:focus{border-color:#111}
+.pay{
+  width:100%; margin-top:14px; padding:15px; border:0; border-radius:13px;
+  background:#111;color:#fff;font-size:17px;font-weight:700;cursor:pointer;
+}
+.pay:hover{opacity:.88}
+.note{font-size:12px;color:#999;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="heart">❤️</div>
+  <h1>Support pscho_045</h1>
+  <p>If you'd like to support me, you can choose any amount you want.</p>
+
+  <div class="quick">
+    <button onclick="setAmount(10)">₹10</button>
+    <button onclick="setAmount(50)">₹50</button>
+    <button onclick="setAmount(100)">₹100</button>
+    <button onclick="setAmount(500)">₹500</button>
+  </div>
+
+  <input id="amount" class="amount" type="number" min="1" step="1"
+         placeholder="Enter amount (₹)" inputmode="numeric">
+
+  <button class="pay" onclick="payNow()">Pay with UPI</button>
+
+  <div class="note">UPI ID: 725048197@upi</div>
+</div>
+
+<script>
+function setAmount(value){
+  document.getElementById('amount').value=value;
+}
+function payNow(){
+  const amount = document.getElementById('amount').value;
+  if(!amount || Number(amount) < 1){
+    alert('Please enter a valid amount.');
+    return;
+  }
+
+  const upiId = '725048197@upi';
+  const name = 'pscho_045';
+  const note = 'Donation to pscho_045';
+
+  const upiUrl =
+    'upi://pay?pa=' + encodeURIComponent(upiId) +
+    '&pn=' + encodeURIComponent(name) +
+    '&am=' + encodeURIComponent(Number(amount).toFixed(2)) +
+    '&cu=INR&tn=' + encodeURIComponent(note);
+
+  window.location.href = upiUrl;
+}
+</script>
+</body>
+</html>
