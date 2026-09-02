@@ -1,60 +1,194 @@
-<!DOCTYPE html>
+from pathlib import Path
+import zipfile
+
+out = Path("/mnt/data/Bihar_Flood_Relif_professional")
+out.mkdir(exist_ok=True)
+
+html = r'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Bihar Flood Relief — support flood-affected families with a voluntary contribution.">
 <title>Bihar_Flood_Relif | Pray For Bihar</title>
 <style>
+:root{
+  --red:#ef233c;--dark:#101418;--muted:#69717c;--line:#e5e7eb;--bg:#f7f8fa;
+}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f7f8fa;color:#111}
-.hero{min-height:100vh;position:relative;display:flex;align-items:center;overflow:hidden;background:#101418 url("hero.jpg") center/cover no-repeat}
-.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.42) 48%,rgba(0,0,0,.20) 100%)}
-.wrap{width:min(1180px,92%);margin:auto;position:relative;z-index:2}
-.nav{position:absolute;top:0;left:0;right:0;padding:26px 0;z-index:3}
-.nav-inner{width:min(1180px,92%);margin:auto;display:flex;justify-content:space-between;align-items:center}
-.brand{display:flex;align-items:center;gap:12px;color:#fff;font-weight:800;font-size:20px}.brand-icon{width:40px;height:40px;border-radius:12px;background:#ef233c;display:grid;place-items:center;font-size:20px}
-.nav-btn{color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.55);padding:11px 18px;border-radius:30px;font-weight:700}
-.hero-content{max-width:650px;padding:130px 0 180px;color:#fff}.eyebrow{color:#ff6b7b;font-size:14px;font-weight:800;letter-spacing:2px;margin-bottom:18px}
-h1{font-size:clamp(48px,7vw,88px);line-height:.96;margin:0 0 24px;letter-spacing:-4px}h1 span{color:#ef233c}.lead{font-size:19px;line-height:1.6;color:#eee;max-width:600px;margin:0 0 30px}
-.trust{display:flex;gap:26px;flex-wrap:wrap;font-weight:700}.trust span{display:flex;align-items:center;gap:8px}.trust b{color:#ef233c;font-size:20px}
-.donate{position:absolute;z-index:5;right:5%;bottom:-170px;width:min(440px,90%);background:#fff;border-radius:28px;padding:30px;box-shadow:0 25px 70px rgba(0,0,0,.28)}
-.donate h2{margin:0 0 7px;font-size:27px}.donate p{margin:0 0 20px;color:#6b7280}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.quick button{border:1px solid #ddd;background:#fafafa;border-radius:12px;padding:12px 4px;font-weight:800;cursor:pointer}.quick button:hover{background:#eee}
-.amount{width:100%;padding:15px;border:1px solid #ccc;border-radius:13px;font-size:20px;text-align:center;outline:none}.amount:focus{border-color:#ef233c}
-.pay{width:100%;margin-top:12px;padding:16px;border:0;border-radius:13px;background:#ef233c;color:#fff;font-size:17px;font-weight:800;cursor:pointer}.pay:hover{opacity:.9}.note{font-size:12px;color:#999;text-align:center;margin-top:13px}
-.impact{padding:230px 0 80px;background:#f7f8fa}.section-title{text-align:center;max-width:650px;margin:0 auto 40px}.section-title h2{font-size:42px;margin:0 0 12px}.section-title p{color:#69717c;font-size:17px;line-height:1.6}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.card{background:#fff;border-radius:20px;padding:26px;box-shadow:0 8px 30px rgba(0,0,0,.06)}.icon{font-size:30px;margin-bottom:18px}.card h3{margin:0 0 8px}.card p{margin:0;color:#69717c;line-height:1.5}
-.quote{background:#ef233c;color:#fff;padding:65px 20px;text-align:center}.quote h2{font-size:38px;margin:0 auto 12px;max-width:800px}.quote p{margin:0;font-size:17px;opacity:.92}
-footer{background:#101418;color:#aaa;text-align:center;padding:28px 20px;font-size:14px}footer strong{color:#fff}
-@media(max-width:900px){.donate{position:relative;right:auto;bottom:auto;margin:-90px auto 0}.hero{min-height:auto}.hero-content{padding:130px 0 150px}.cards{grid-template-columns:repeat(2,1fr)}.impact{padding-top:140px}}
-@media(max-width:600px){.nav{padding:18px 0}.brand{font-size:16px}.brand-icon{width:36px;height:36px}.nav-btn{padding:9px 13px;font-size:13px}.hero-content{padding:110px 0 125px}.hero:before{background:linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.42))}h1{letter-spacing:-2px}.lead{font-size:16px}.trust{gap:14px;font-size:13px}.donate{padding:23px;border-radius:22px}.quick{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr}.section-title h2{font-size:32px}.quote h2{font-size:29px}}
+body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:#111}
+button,input{font:inherit}
+.hero{
+  min-height:700px; position:relative; display:flex; align-items:center;
+  overflow:hidden; color:#fff; background:#111;
+}
+.hero-photo{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  background:
+    linear-gradient(90deg,rgba(8,12,16,.96) 0%,rgba(8,12,16,.82) 35%,rgba(8,12,16,.18) 75%,rgba(8,12,16,.32) 100%),
+    url("hero.jpg") center/cover no-repeat;
+}
+.hero-content{position:relative;z-index:2;width:min(1180px,92%);margin:auto;padding:100px 0 180px}
+.nav{position:absolute;top:0;left:0;right:0;z-index:3;width:min(1180px,92%);margin:auto;padding:24px 0;display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:18px;font-weight:800;display:flex;align-items:center;gap:10px}
+.brand-mark{width:38px;height:38px;border-radius:12px;background:var(--red);display:grid;place-items:center;font-size:20px}
+.nav-pill{border:1px solid rgba(255,255,255,.5);padding:10px 16px;border-radius:999px;font-weight:700}
+.kicker{font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:800;color:#ff8795;margin-bottom:16px}
+h1{font-size:clamp(48px,7vw,82px);line-height:.98;max-width:720px;margin:0 0 24px;letter-spacing:-3px}
+h1 span{color:var(--red)}
+.hero-copy{font-size:20px;line-height:1.55;max-width:560px;color:#e9edf1;margin-bottom:30px}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.stat{display:flex;align-items:center;gap:10px;font-weight:700}.stat i{font-style:normal;font-size:25px;color:#ff5365}
+.donate-wrap{position:relative;margin-top:-150px;z-index:5}
+.donate{
+  width:min(850px,92%);margin:auto;background:#fff;border-radius:28px;padding:40px;
+  box-shadow:0 25px 70px rgba(16,20,24,.18);text-align:center
+}
+.heart{width:70px;height:70px;margin:-75px auto 18px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:34px;border:8px solid var(--bg)}
+.donate h2{font-size:32px;margin:0 0 8px}.donate p{color:var(--muted);margin:0 0 26px}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.quick button{border:1px solid #dfe2e7;background:#fff;border-radius:13px;padding:15px 8px;font-weight:800;cursor:pointer}
+.quick button:hover,.quick button.active{background:#111;color:#fff;border-color:#111}
+.amount{width:100%;padding:17px;border:1px solid #d8dce2;border-radius:14px;text-align:center;font-size:20px;outline:none}
+.amount:focus{border-color:#111}
+.pay{width:100%;margin-top:13px;padding:17px;border:0;border-radius:14px;background:var(--red);color:#fff;font-weight:800;font-size:18px;cursor:pointer;box-shadow:0 8px 20px rgba(239,35,60,.22)}
+.pay:hover{filter:brightness(.95);transform:translateY(-1px)}
+.secure{margin-top:14px;color:#8a929d;font-size:12px}
+.section{width:min(1100px,92%);margin:80px auto}
+.section-title{text-align:center;max-width:700px;margin:0 auto 35px}
+.section-title h2{font-size:36px;margin:0 0 10px}.section-title span{color:var(--red)}.section-title p{color:var(--muted);line-height:1.6}
+.impact{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.impact-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px 18px;text-align:center}
+.icon{font-size:34px;margin-bottom:12px}.impact-card h3{margin:0 0 8px}.impact-card p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}
+.quote{background:linear-gradient(120deg,#b9142c,#ef233c);color:#fff;padding:48px 20px;margin-top:80px}
+.quote-inner{width:min(1000px,92%);margin:auto;display:flex;justify-content:space-between;align-items:center;gap:30px}
+.quote p{font-size:23px;line-height:1.4;margin:0;max-width:700px;font-weight:600}.quote strong{white-space:nowrap}
+footer{background:#101418;color:#d9dde2;padding:28px 5%;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+footer .brand{color:#fff} footer small{color:#9299a3}
+@media(max-width:760px){
+ .hero{min-height:680px}.hero-content{padding-top:100px}
+ .hero-photo{background:linear-gradient(90deg,rgba(8,12,16,.9),rgba(8,12,16,.55)),url("hero.jpg") center/cover no-repeat}
+ h1{font-size:50px;letter-spacing:-2px}.hero-copy{font-size:17px}
+ .donate{padding:30px 18px}.donate h2{font-size:27px}.quick{grid-template-columns:repeat(2,1fr)}
+ .impact{grid-template-columns:repeat(2,1fr)}.quote-inner{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:430px){.impact{grid-template-columns:1fr}.nav-pill{display:none}}
 </style>
 </head>
 <body>
-<section class="hero" id="home">
-  <div class="nav"><div class="nav-inner"><div class="brand"><div class="brand-icon">♥</div>Bihar_Flood_Relif</div><a class="nav-btn" href="#donate">♡ Pray For Bihar</a></div></div>
-  <div class="wrap"><div class="hero-content">
-    <div class="eyebrow">BIHAR FLOOD RELIEF</div>
+
+<section class="hero">
+  <div class="hero-photo" aria-hidden="true"></div>
+
+  <nav class="nav">
+    <div class="brand"><div class="brand-mark">♥</div>Bihar_Flood_Relif</div>
+    <div class="nav-pill">♡ Pray For Bihar</div>
+  </nav>
+
+  <div class="hero-content">
+    <div class="kicker">Bihar Flood Relief</div>
     <h1>Together We Can<br><span>Help Bihar</span></h1>
-    <p class="lead">Your small contribution can bring hope, relief and essential support to people affected by the floods.</p>
-    <div class="trust"><span><b>♡</b> Bring Hope</span><span><b>✓</b> Direct UPI</span><span><b>♧</b> Help Communities</span></div>
-  </div></div>
-  <div class="donate" id="donate">
-    <h2>Bihar_Flood_Relif</h2><p>Choose any amount you would like to contribute.</p>
-    <div class="quick"><button onclick="setAmount(10)">₹10</button><button onclick="setAmount(50)">₹50</button><button onclick="setAmount(100)">₹100</button><button onclick="setAmount(500)">₹500</button></div>
-    <input id="amount" class="amount" type="number" min="1" step="1" placeholder="Enter amount (₹)" inputmode="numeric">
-    <button class="pay" onclick="payNow()">Pay with UPI</button>
-    <div class="note">Direct UPI payment • You choose the amount</div>
+    <p class="hero-copy">Your small contribution can bring hope, relief and essential support to people affected by the floods.</p>
+    <div class="hero-stats">
+      <div class="stat"><i>♡</i> Bring Hope</div>
+      <div class="stat"><i>✓</i> Direct UPI</div>
+      <div class="stat"><i>♧</i> Help Communities</div>
+    </div>
   </div>
 </section>
-<section class="impact"><div class="wrap"><div class="section-title"><h2>Your Support Makes a Real Impact</h2><p>Every contribution, big or small, can help provide essential support to families affected by flooding.</p></div><div class="cards"><div class="card"><div class="icon">🍚</div><h3>Food & Water</h3><p>Help provide essential food and clean drinking water.</p></div><div class="card"><div class="icon">🏠</div><h3>Shelter & Relief</h3><p>Support emergency shelter and basic relief supplies.</p></div><div class="card"><div class="icon">🩺</div><h3>Medical Aid</h3><p>Help affected communities access urgent medical support.</p></div><div class="card"><div class="icon">♥</div><h3>Rebuild Lives</h3><p>Stand with families as they recover and rebuild.</p></div></div></div></section>
-<section class="quote"><h2>“Together, even a small act of kindness can bring hope.”</h2><p>Pray For Bihar ❤️</p></section>
-<footer><strong>Bihar_Flood_Relif</strong> • Pray For Bihar</footer>
+
+<section class="donate-wrap">
+  <div class="donate">
+    <div class="heart">♡</div>
+    <h2>Bihar_Flood_Relif</h2>
+    <p>Choose any amount you would like to contribute.</p>
+
+    <div class="quick">
+      <button onclick="setAmount(10,this)">₹10</button>
+      <button onclick="setAmount(50,this)">₹50</button>
+      <button onclick="setAmount(100,this)">₹100</button>
+      <button onclick="setAmount(500,this)">₹500</button>
+    </div>
+
+    <input id="amount" class="amount" type="number" min="1" step="1"
+           placeholder="Enter amount (₹)" inputmode="numeric">
+
+    <button class="pay" onclick="payNow()">♡ &nbsp; Pay with UPI</button>
+    <div class="secure">Secure UPI payment • You choose the amount</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-title">
+    <h2>Your Support Makes a <span>Real Impact</span></h2>
+    <p>Every contribution can help provide essential support and relief to people affected by flooding.</p>
+  </div>
+
+  <div class="impact">
+    <div class="impact-card"><div class="icon">🍚</div><h3>Food & Water</h3><p>Essential food, drinking water and daily supplies.</p></div>
+    <div class="impact-card"><div class="icon">🏠</div><h3>Shelter & Relief</h3><p>Support for families needing safe temporary shelter.</p></div>
+    <div class="impact-card"><div class="icon">✚</div><h3>Medical Aid</h3><p>Emergency medical and first-aid support.</p></div>
+    <div class="impact-card"><div class="icon">♥</div><h3>Rebuild Lives</h3><p>Helping affected communities recover and rebuild.</p></div>
+  </div>
+</section>
+
+<section class="quote">
+  <div class="quote-inner">
+    <p>“The smallest act of kindness can become someone's biggest hope.”</p>
+    <strong>♥ Pray For Bihar</strong>
+  </div>
+</section>
+
+<footer>
+  <div class="brand"><div class="brand-mark">♥</div>Bihar_Flood_Relif</div>
+  <small>Thank you for your support and generosity. ♥</small>
+</footer>
+
 <script>
-const UPI_ID='7biharfloodhelp@naviaxis';
-const PAYEE_NAME='Bihar_Flood_Relif';
-const NOTE='Bihar_Flood_Relif';
-function setAmount(value){document.getElementById('amount').value=value}
-function payNow(){const amount=document.getElementById('amount').value;if(!amount||Number(amount)<1){alert('Please enter a valid amount.');return}const upiUrl='upi://pay?pa='+encodeURIComponent(UPI_ID)+'&pn='+encodeURIComponent(PAYEE_NAME)+'&am='+encodeURIComponent(Number(amount).toFixed(2))+'&cu=INR&tn='+encodeURIComponent(NOTE);window.location.href=upiUrl}
+const UPI_ID = '7biharfloodhelp@naviaxis';
+const PAYEE_NAME = 'Bihar_Flood_Relif';
+const NOTE = 'Bihar_Flood_Relif';
+
+function setAmount(value, button){
+  document.getElementById('amount').value = value;
+  document.querySelectorAll('.quick button').forEach(b=>b.classList.remove('active'));
+  button.classList.add('active');
+}
+function payNow(){
+  const amount = document.getElementById('amount').value;
+  if(!amount || Number(amount) < 1){
+    alert('Please enter a valid amount.');
+    return;
+  }
+  const upiUrl =
+    'upi://pay?pa=' + encodeURIComponent(UPI_ID) +
+    '&pn=' + encodeURIComponent(PAYEE_NAME) +
+    '&am=' + encodeURIComponent(Number(amount).toFixed(2)) +
+    '&cu=INR&tn=' + encodeURIComponent(NOTE);
+  window.location.href = upiUrl;
+}
 </script>
 </body>
-</html>
+</html>'''
+
+(out / "index.html").write_text(html, encoding="utf-8")
+
+readme = """Bihar_Flood_Relif professional page
+
+IMPORTANT:
+1. Put a flood-relief photo named "hero.jpg" in the SAME folder as index.html.
+2. Upload both index.html and hero.jpg to your GitHub Pages repository.
+3. The existing UPI ID in the code is 7biharfloodhelp@naviaxis.
+4. The payment button opens a UPI payment intent with the amount entered by the donor.
+
+The page is responsive and designed to work on mobile and desktop.
+"""
+(out / "README.txt").write_text(readme, encoding="utf-8")
+
+zip_path = Path("/mnt/data/Bihar_Flood_Relif_professional_site.zip")
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
+    z.write(out / "index.html", "index.html")
+    z.write(out / "README.txt", "README.txt")
+
+print(f"Ready: {zip_path}")
